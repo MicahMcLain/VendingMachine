@@ -1,9 +1,15 @@
 package com.techelevator;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserInterface {
+
+
+    public UserInterface() {
+    }
+
     Scanner scanner = new Scanner(System.in);
 
     public String displayMainMenu(){
@@ -15,63 +21,71 @@ public class UserInterface {
         return scanner.nextLine();
     }
 
-    public String displayItemButtons() {
+    public String selectProduct() {
+        System.out.print("Pick an item you would like to purchase -> ");
+        return scanner.nextLine();
+    }
 
-        System.out.println("Vend-o-Matic 800");
-        System.out.println("Please select the item you would like to buy");
-        System.out.println("A1 || A2 || A3 || A4");
-        System.out.println("B1 || B2 || B3 || B4");
-        System.out.println("C1 || C2 || C3 || C4");
-        System.out.println("D1 || D2 || D3 || D4");
+    public String askHowMuchMoney() {
+        System.out.print("How much money would you like to enter? -> ");
 
-        System.out.println("Exit");
+        return scanner.nextLine();
+
+    }
+
+    public String purchaseItemOption(){
+        System.out.println("(1) Feed Money");
+        System.out.println("(2) Select Product");
+        System.out.println("(3) Finish Transaction");
 
         return scanner.nextLine();
     }
 
-    public String purchaseItem(String itemName, BigDecimal itemPrice){
-        System.out.printf("%s costs $%f .", itemName, itemPrice);
-        System.out.println("Would you like to purchase this item?");
-        System.out.println("(1) Purchase");
-        System.out.println("(2) Go back");
-
-        return scanner.nextLine();
-    }
-
-    public void displayMoneyAmount(BigDecimal price){
-        System.out.printf("Please enter $%f", price);
-        //loop through and update price if they didn't enter enough money
-
-    }
 
     public void displayGiveChange(BigDecimal change){
         System.out.printf("The amount of change you'll receive is $%f", change);
 
     }
 
-    public String displaySelectedItem(Item picked) {
-        System.out.println(picked);
+    public void displaySelectedItem(Item picked) {
+        System.out.println(picked.getItemName() + " costs $" + picked.getItemPrice());
         System.out.println();
-        return scanner.nextLine();
+
     }
 
 
     public void displayGoodbyeMessage() {
         System.out.println("Have a good day!");
+        System.out.println();
     }
 
     public void displayInvalidInput() {
         System.out.println("Invalid input. Please try again!");
+        System.out.println();
     }
 
-    public String displayItemInfo(Item picked) {
-        System.out.println(picked);
-        System.out.println("(1) Deposit");
-        System.out.print("Select option > ");
-
-        return scanner.nextLine();
+    public void displayAllItems(List<Item> slots){
+        for (Item eachItem : slots){
+            System.out.println(eachItem.getItemSlot() +" | "+eachItem.getItemName() +" | "
+                    + eachItem.getItemPrice() +" | "+ eachItem.getItemType() + " | "+ eachItem.getItemAmount());
+        }
+        System.out.println();
     }
-    public String displayAllItems(){
-        return slots;
+
+    public void itemSoldOut() {
+
+        System.out.println("Sorry, that item is sold out. Please choose another item.");
+
+    }
+
+    public void displayTotalAMTEntered(BigDecimal total) {
+
+        System.out.print("Your total amount entered is: " + total);
+        System.out.println();
+
+    }
+
+    public void displayNotEnough() {
+        System.out.println("Please enter more money");
     }
 }
