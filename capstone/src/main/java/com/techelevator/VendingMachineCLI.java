@@ -21,6 +21,7 @@ public class VendingMachineCLI {
 
     UserInterface ui = new UserInterface();
     Transactions transactions = new Transactions();
+    Log log = new Log();
 
     public VendingMachineCLI() {
         readFile();
@@ -88,10 +89,13 @@ public class VendingMachineCLI {
     public void doPurchaseWorkflow() {
         while (true) {
             String userChoice = ui.purchaseItemOption();
+            Item picked = null;
             if (userChoice.equals("1")) {
                 BigDecimal total = new BigDecimal(String.valueOf(transactions.amountEntered()));
                 transactions.setCurrentAmt(total);
                 ui.displayTotalAMTEntered(total);
+                //log money feed (total)
+                log.printFeedMoney(total);
 
             } else if (userChoice.equals("2")) {
                 ui.displayAllItems(slots);
@@ -99,14 +103,16 @@ public class VendingMachineCLI {
                 if (selectedItem.equals(""))
                     continue;
 
-                Item picked = selectItem(selectedItem);
+                picked = selectItem(selectedItem);
                 if (picked != null) {
                     if (hasEnoughMoney(picked)) {
                         if (hasEnoughItems(picked)) {
                             transactions.purchaseItem(picked);
                             picked.dispenseItem();
+                           // log.printPurchasedItem(picked);
                             ui.displayItemTypeMessage(picked);
                             ui.displayLeftOverMoney(transactions.getCurrentAmt());
+                            log.printPurchasedItem(picked, transactions.getCurrentAmt());
                         } else {
                             ui.itemSoldOut();
                         }
@@ -116,11 +122,13 @@ public class VendingMachineCLI {
 
                 }
             } else if (userChoice.equals("3")) {
-                transactions.makeChange();
-            } else if (userChoice.equals("")){
+                transactions.setAmtLeft(transactions.getCurrentAmt());
+                ui.displayGiveChange(transactions.makeChange());
+
+                break;
+            } else if (userChoice.equals("")) {
                 return;
-            }
-            else {
+            } else {
                 ui.displayInvalidInput();
             }
         }
@@ -153,4 +161,6 @@ public class VendingMachineCLI {
         return picked.getItemAmount() > 0;
 
     }
+
+
 }

@@ -45,14 +45,9 @@ public class UserInterface {
     }
 
 
-    public void displayGiveChange(BigDecimal change){
-        System.out.printf("The amount of change you'll receive is $%f", change);
-
-    }
-
-    public void displaySelectedItem(Item picked) {
-        System.out.println(picked.getItemName() + " costs $" + picked.getItemPrice());
-        System.out.println();
+    public void displayGiveChange(List<BigDecimal> coins){
+        System.out.printf("The number of coins you'll receive is %s quarters, %s dimes, %s nickels.",
+                coins.get(0), coins.get(1), coins.get(2));
 
     }
 
@@ -97,6 +92,7 @@ public class UserInterface {
     }
 
     public void displayItemTypeMessage(Item picked) {
+        System.out.println();
         if (picked.getItemType().equals("Candy")) {
             System.out.println("Munch Munch, Yum!");
         } else if (picked.getItemType().equals("Chip")) {
@@ -108,5 +104,9 @@ public class UserInterface {
         }
     }
 
+    public void displayNoChange() {
+        System.out.println();
+        System.out.println("You won't get any change");
+    }
 }
 
