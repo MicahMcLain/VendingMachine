@@ -7,10 +7,47 @@ public class Transactions {
     }
 
     UserInterface ui = new UserInterface();
+    BigDecimal amtLeft;
+    private int amtQuarters;
+    private int amtDimes;
+    private int amtNickels;
 
-    private BigDecimal quarter = new BigDecimal("0.25");
-    private BigDecimal dime = new BigDecimal("0.10");
-    private BigDecimal nickel = new BigDecimal("0.05");
+    public BigDecimal getAmtLeft() {
+        return amtLeft;
+    }
+
+    public void setAmtLeft(BigDecimal amtLeft) {
+        this.amtLeft = amtLeft;
+    }
+
+
+    public int getAmtQuarters() {
+        return amtQuarters;
+    }
+
+    public void setAmtQuarters(int amtQuarters) {
+        this.amtQuarters = amtQuarters;
+    }
+
+    public int getAmtDimes() {
+        return amtDimes;
+    }
+
+    public void setAmtDimes(int amtDimes) {
+        this.amtDimes = amtDimes;
+    }
+
+    public int getAmtNickels() {
+        return amtNickels;
+    }
+
+    public void setAmtNickels(int amtNickels) {
+        this.amtNickels = amtNickels;
+    }
+
+    final private BigDecimal quarter = new BigDecimal("0.25");
+    final private BigDecimal dime = new BigDecimal("0.10");
+    final private BigDecimal nickel = new BigDecimal("0.05");
 
     public BigDecimal getQuarter() {
         return quarter;
@@ -25,33 +62,45 @@ public class Transactions {
     }
     BigDecimal currentAmt = new BigDecimal("0");
 
+    public BigDecimal getCurrentAmt() {
+        return currentAmt;
+    }
+
+    public void setCurrentAmt(BigDecimal currentAmt) {
+        this.currentAmt = currentAmt;
+    }
+
     public BigDecimal amountEntered(){
 
-       while(true) {
-           BigDecimal amtEntered = new BigDecimal(ui.askHowMuchMoney());
-               currentAmt = currentAmt.add(amtEntered);
-           //System.out.println(totalAmtEntered);
-           break;
-       }
+        while(true) {
+            BigDecimal amtEntered = new BigDecimal(ui.askHowMuchMoney());
+            currentAmt = currentAmt.add(amtEntered);
+         break;
+        }
         return currentAmt;
 
     }
 
-    public void purchaseItem() {
-        BigDecimal balance = new BigDecimal(0);
-        //total amount entered - item price
-        //give change
+    public BigDecimal purchaseItem(Item picked) {
+        currentAmt = currentAmt.subtract(picked.getItemPrice());
+
+        return currentAmt;
     }
     public void makeChange(){
-        int amtQuarters = 0;
-        int amtDimes = 0;
-        int amtNickels = 0;
+        amtQuarters = 0;
+        amtDimes = 0;
+        amtNickels = 0;
+        if (amtLeft.compareTo(quarter) > 0){
+            //loop through and subtract quarters until less than 25
+        }
+        else if (amtLeft.compareTo(dime) > 0){
+            //loop through and subtract dimes until less than 10
+        }
+        else {
+            //loop through and add nickels until 0
+        }
 
     }
 
-//    public void depositMoney(BigDecimal balance) {
-//        if(balance.compareTo(amountEntered()) == 0)
-//            amountEntered()
-//
-//    }
+
 }

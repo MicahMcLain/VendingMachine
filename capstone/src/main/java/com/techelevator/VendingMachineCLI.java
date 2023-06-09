@@ -18,6 +18,7 @@ public class VendingMachineCLI {
         this.slots = slots;
     }
 
+
     UserInterface ui = new UserInterface();
     Transactions transactions = new Transactions();
 
@@ -81,62 +82,75 @@ public class VendingMachineCLI {
 
     }
 
-    public void selectItem() {
-        while (true) {
-            String selectedItem = ui.selectProduct();
 
-            if (selectedItem.equals("")) return;
-
-            for (Item chosenItem : slots) {
-                if (selectedItem.equals(chosenItem.getItemSlot())) {
-                    picked = chosenItem;
-                    break;
-                }
-            }
-            if (picked != null) {
-                ui.displaySelectedItem(picked);
-            }
-
-            else  {
-                ui.displayInvalidInput();
-                return;
-            }
-        }
-    }
-        private Item picked;
+    //private Item picked;
 
     public void doPurchaseWorkflow() {
         while (true) {
             String userChoice = ui.purchaseItemOption();
             if (userChoice.equals("1")) {
-               BigDecimal total = new BigDecimal(String.valueOf(transactions.amountEntered()));
-               ui.displayTotalAMTEntered(total);
+                BigDecimal total = new BigDecimal(String.valueOf(transactions.amountEntered()));
+                transactions.setCurrentAmt(total);
+                ui.displayTotalAMTEntered(total);
 
             } else if (userChoice.equals("2")) {
                 ui.displayAllItems(slots);
-                selectItem();
-                //if item code doesnt exist, display error message
-                if(picked.getItemAmount() < 1){
-                    ui.itemSoldOut();
-                }
-                //if bought, display message based on item type
-                //then change item quantity to one less
-            } else if (userChoice.equals("3")){
-                //give change if necessary
-                BigDecimal amtEntered = new BigDecimal(ui.askHowMuchMoney());
-                //return to main menu
+                String selectedItem = ui.selectProduct();
+                if (selectedItem.equals(""))
+                    continue;
 
-                if((amtEntered.compareTo(picked.getItemPrice()) > 0)){
-                    transactions.purchaseItem();
-                    //give change function from transactions
-                    //log transaction
-                } else {
-                    ui.displayNotEnough();
-                    //return to this menu instead of main menu
+                Item picked = selectItem(selectedItem);
+                if (picked != null) {
+                    if (hasEnoughMoney(picked)) {
+                        if (hasEnoughItems(picked)) {
+                            transactions.purchaseItem(picked);
+                            picked.dispenseItem();
+                            ui.displayItemTypeMessage(picked);
+                            ui.displayLeftOverMoney(transactions.getCurrentAmt());
+                        } else {
+                            ui.itemSoldOut();
+                        }
+                    } else {
+                        ui.displayNotEnough();
+                    }
+
                 }
+            } else if (userChoice.equals("3")) {
+                transactions.makeChange();
+            } else if (userChoice.equals("")){
+                return;
             }
-            //return;
+            else {
+                ui.displayInvalidInput();
+            }
         }
+        //return;
     }
 
+
+
+    public boolean hasEnoughMoney(Item picked) {
+        if (transactions.getCurrentAmt().compareTo(picked.getItemPrice()) > 0)
+            return true;
+        ui.displayNotEnough();
+        return false;
+    }
+
+
+    public Item selectItem(String selectedItem) {
+
+            for (Item chosenItem : slots) {
+                if (selectedItem.equals(chosenItem.getItemSlot())) {
+                    return chosenItem;
+                }
+
+            }
+            ui.displayInvalidInput();
+            return null;
+    }
+
+    private boolean hasEnoughItems(Item picked) {
+        return picked.getItemAmount() > 0;
+
+    }
 }

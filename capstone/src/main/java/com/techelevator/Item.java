@@ -73,5 +73,7 @@ public class Item {
     public void setItemSlot(String itemSlot) {
         this.itemSlot = itemSlot;
     }
-
+    public void dispenseItem(){
+            itemAmount --;
+    }
 }

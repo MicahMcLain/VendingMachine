@@ -13,6 +13,7 @@ public class UserInterface {
     Scanner scanner = new Scanner(System.in);
 
     public String displayMainMenu(){
+        System.out.println();
         System.out.println("Welcome to the Vend-o-Matic 800");
         System.out.println("(1) Display Vending Machine Items");
         System.out.println("(2) Purchase");
@@ -34,9 +35,11 @@ public class UserInterface {
     }
 
     public String purchaseItemOption(){
+        System.out.println();
         System.out.println("(1) Feed Money");
         System.out.println("(2) Select Product");
         System.out.println("(3) Finish Transaction");
+
 
         return scanner.nextLine();
     }
@@ -80,7 +83,7 @@ public class UserInterface {
 
     public void displayTotalAMTEntered(BigDecimal total) {
 
-        System.out.print("Your total amount entered is: " + total);
+        System.out.print("Your total amount entered is: $" + total);
         System.out.println();
 
     }
@@ -88,4 +91,22 @@ public class UserInterface {
     public void displayNotEnough() {
         System.out.println("Please enter more money");
     }
+
+    public void displayLeftOverMoney(BigDecimal amtLeft) {
+        System.out.println("The amount of money you have left is: $" + amtLeft);
+    }
+
+    public void displayItemTypeMessage(Item picked) {
+        if (picked.getItemType().equals("Candy")) {
+            System.out.println("Munch Munch, Yum!");
+        } else if (picked.getItemType().equals("Chip")) {
+            System.out.println("Crunch Crunch, Yum!");
+        } else if (picked.getItemType().equals("Drink")) {
+            System.out.println("Glug Glug, Yum!");
+        } else if (picked.getItemType().equals("Gum")) {
+            System.out.println("Chew Chew, Yum!");
+        }
+    }
+
 }
+
